@@ -19,7 +19,7 @@ type Link struct {
 	// the id of the client related to the master of this relationship
 	// required: true
 	ClientNodeId uint64 `json:"client_node_id" validate:"required"`
-	// the type that describe of this relationship
+	// the type that describe this link
 	// required: false
 	LinkType LinkType `json:"link_type"`
 }
