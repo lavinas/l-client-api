@@ -1,4 +1,10 @@
+// Package domain provides data structure to client api system
 package domain
+
+import (
+	"github.com/go-playground/validator/v10"
+)
+
 //  Client represents basic informations of a client
 //
 // A client is the security principal for this application.
@@ -13,24 +19,25 @@ type Client struct {
 	Id uint64 `json:"id"`
 	// the name for this client
 	// required: true
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required"`
 	// the document number for this client
 	// required: false
 	Document uint64 `json:"document"`
 	// the email address for this client
 	// required: false
 	// example: user@provider.net
-	Email string `json:"email"`
+	Email string `json:"email" validate:"email"`
 	// the cell number for this client
 	// required: false
-	Cell uint64 `json:"phone"`
+	CellPhone uint64 `json:"cell_phone"`
 	// the unified password for this client
 	// required: false
-	Password string `json:"password"`
+	Password string `json:"password" validate:"base64"`
 }
 
-
-// validate Client fields
+// Validate is a Client method that validate if the fields are in the right expected format
 func (c *Client) Validate() error {
-	return nil
+	// fuck
+	v := validator.New()
+	return v.Struct(c)
 }
