@@ -22,14 +22,14 @@ type Client struct {
 	Name string `json:"name" validate:"required"`
 	// the document number for this client
 	// required: false
-	Document uint64 `json:"document"`
+	Document uint64 `json:"document" validate:"required"`
 	// the email address for this client
-	// required: false
+	// required: true
 	// example: user@provider.net
-	Email string `json:"email" validate:"email"`
-	// the cell number for this client
+	Email string `json:"email" validate:"required, email"`
+	// the cell number for this client in the i164 pattern
 	// required: false
-	CellPhone uint64 `json:"cell_phone"`
+	CellPhoneI164 uint64 `json:"cell_phone_i164"`
 	// the unified password for this client
 	// required: false
 	Password string `json:"password" validate:"base64"`
