@@ -2,7 +2,10 @@ module github.com/lavinas/l-client-api
 
 go 1.17
 
-require github.com/go-playground/validator/v10 v10.9.0
+require (
+	github.com/go-playground/validator/v10 v10.9.0
+	github.com/gorilla/mux v1.8.0
+)
 
 require (
 	github.com/go-playground/locales v0.14.0 // indirect
