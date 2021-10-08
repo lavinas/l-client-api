@@ -12,6 +12,7 @@ import (
 const (
 	envLogLevel  = "LOG_LEVEL"
 	envLogOutput = "LOG_OUTPUT"
+	envLogErrorOutput = "LOG_ERROR"
 )
 
 var (
@@ -46,6 +47,7 @@ func (l logger) Print(v ...interface{}) {
 func init() {
 	logConfig := zap.Config{
 		OutputPaths: []string{getOutput()},
+		ErrorOutputPaths: []string{getErrorOutput()},
 		Level:       zap.NewAtomicLevelAt(getLevel()),
 		Encoding:    "json",
 		EncoderConfig: zapcore.EncoderConfig{
@@ -67,7 +69,15 @@ func init() {
 func getOutput() string {
 	ret := os.Getenv(strings.ToLower(strings.TrimSpace(envLogOutput)))
 	if ret == "" {
-		return "output"
+		return "stdout"
+	}
+	return ret
+}
+
+func getErrorOutput() string {
+	ret := os.Getenv(strings.ToLower(strings.TrimSpace(envLogOutput)))
+	if ret == "" {
+		return "stdout"
 	}
 	return ret
 }
@@ -80,6 +90,10 @@ func getLevel() zapcore.Level {
 		return zap.InfoLevel
 	case "error":
 		return zap.ErrorLevel
+	case "panic":
+		return zap.PanicLevel
+	case "Fatal":
+		return zap.FatalLevel
 	default:
 		return zap.InfoLevel
 	}

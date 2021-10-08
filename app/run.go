@@ -23,7 +23,7 @@ func run() {
 	// Run our server in a goroutine so that it doesn't block.
 	s := &http.Server{
 		Handler:      r,
-		Addr:         ":8000",
+		Addr:         ":8001",
 		WriteTimeout: 2 * time.Second,
 		ReadTimeout:  2 * time.Second,
 		IdleTimeout:  60 * time.Second,
