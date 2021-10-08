@@ -2,6 +2,8 @@ package handler
 
 import (
 	"net/http"
+
+	"github.com/lavinas/l-client-api/util/http_util"
 )
 
 const (
@@ -19,5 +21,5 @@ type pingHandlerInterface interface {
 type pingHandler struct{}
 
 func (c *pingHandler) Ping(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(pong))
+	http_util.RespondJson(w, http.StatusOK, pong)
 }

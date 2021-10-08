@@ -1,6 +1,9 @@
 package logger
 
 import (
+	"fmt"
+	"time"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -8,14 +11,15 @@ import (
 type RequestLogger struct {
 	Uri string
 	Addr string
-	Response int
-
+	Code int
+	Duration time.Duration
 }
 
 func (r *RequestLogger) MarshalLogObject(enc zapcore.ObjectEncoder) error {
 	enc.AddString("uri", r.Uri)
 	enc.AddString("addr", r.Addr)
-	enc.AddInt("response", r.Response)
+	enc.AddInt("code", r.Code)
+	enc.AddString("duration", fmt.Sprintf("%s ", r.Duration))
 	return nil
 }
 

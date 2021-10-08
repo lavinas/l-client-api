@@ -1,5 +1,0 @@
-{"level":"info","time":"2021-10-08T17:29:52.994-0300","msg":"Starting app"}
-{"level":"info","time":"2021-10-08T17:29:54.797-0300","msg":"Call","info":{"uri":"/ping","addr":"127.0.0.1:59218"}}
-{"level":"info","time":"2021-10-08T17:30:08.832-0300","msg":"Call","info":{"uri":"/ping","addr":"127.0.0.1:59218"}}
-{"level":"info","time":"2021-10-08T17:32:11.893-0300","msg":"Shutting Down app with interrupt"}
-{"level":"fatal","time":"2021-10-08T17:32:11.899-0300","msg":"Error on listener","error":"http: Server closed"}
