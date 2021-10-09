@@ -1,4 +1,4 @@
-// Package app is a tools set that respond for a http deal layer 
+// Package app is a tools set that respond for a http deal layer
 package app
 
 import (
@@ -18,8 +18,9 @@ var (
 	sg = make(chan os.Signal)
 	// r is a http router responsible for deal with http layer
 	// it uses gorilla mux code
-	r  = mux.NewRouter()
+	r = mux.NewRouter()
 )
+
 // run is a local function that execute listener and prepare for grecefully shutdown
 func run() {
 	logger.Info("starting")

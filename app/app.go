@@ -1,4 +1,4 @@
-// Package app is a tools set that respond for a http deal layer 
+// Package app is a tools set that respond for a http deal layer
 package app
 
 // StartApp map and run http listener main program
