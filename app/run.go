@@ -1,3 +1,4 @@
+// Package app is a tools set that respond for a http deal layer 
 package app
 
 import (
@@ -13,10 +14,12 @@ import (
 )
 
 var (
+	// sg has a os.signal
 	sg = make(chan os.Signal)
-	r = mux.NewRouter()
+	// r is a http router responsible for deal with http layer
+	// it uses gorilla mux code
+	r  = mux.NewRouter()
 )
-
 // run is a local function that execute listener and prepare for grecefully shutdown
 func run() {
 	logger.Info("starting")
@@ -35,12 +38,12 @@ func run() {
 		}
 	}()
 	// We'll accept graceful shutdowns when quit via SIGINT (Ctrl+C)
-    // SIGKILL, SIGQUIT or SIGTERM (Ctrl+/) will not be caught.
+	// SIGKILL, SIGQUIT or SIGTERM (Ctrl+/) will not be caught.
 	signal.Notify(sg, os.Interrupt)
 	sig := <-sg
 	logger.Info(fmt.Sprintf("shutting down with %s", sig))
 	tc, cc := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cc()
 	s.Shutdown(tc)
-	os.Exit(0)		
+	os.Exit(0)
 }
