@@ -13,16 +13,22 @@ const (
 	cFile   = "./config.yaml"
 )
 
+var (
+	c config
+)
+
 type configInterface interface {
+	Get(string) string
 }
 
 type config struct {
 	c *uberconf.YAML
 }
 
-var (
-	c config
-)
+func (c config) Get(s string) string {
+	v := c.c.Get(s)
+	return v.Source()
+}
 
 func init() {
 	var err error
