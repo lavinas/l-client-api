@@ -1,5 +1,5 @@
 // Package logger provides logger tools
-// logger use go.uber.org/zap as support main tool
+// logger uses go.uber.org/zap as support main tool
 package logger
 
 import (
