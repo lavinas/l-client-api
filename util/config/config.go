@@ -9,52 +9,56 @@ import (
 )
 
 const (
-	envFile = "CONFIG_PATH"
-	cFile   = "./config.yaml"
+	cFile = "./config.yaml"
 )
 
 var (
+	vFile = cFile
 	c config
 )
 
-type configInterface interface {
+type ConfigInterface interface {
 	Get(string) string
+	SetFile(string) error
 }
 
 type config struct {
 	c *uberconf.YAML
 }
 
+func (c *config) SetFile(file string) error {
+	var err error
+	vFile = file
+	f, err := os.Open(vFile)
+	if err != nil {
+		return err
+	}
+	c.c, err = uberconf.NewYAML(uberconf.Source(f))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c config) Get(s string) string {
+	if c.c == nil {
+		return ""
+	}
 	v := c.c.Get(s)
 	return v.Source()
 }
 
 func init() {
-	var err error
-	f, err := os.Open(getFile())
+	err := c.SetFile(vFile)
 	if err != nil {
-		panic(err)
-	}
-	c.c, err = uberconf.NewYAML(uberconf.Source(f))
-	if err != nil {
-		panic(err)
+		c.c = nil
 	}
 }
 
-func getFile() string {
-	p := os.Getenv(envFile)
-	if p == "" {
-		return cFile
-	}
-	return p
-}
-
-func GetConfig() configInterface {
-	return c
+func GetConfig() ConfigInterface {
+	return &c
 }
 
 func Get(s string) string {
-	v := c.c.Get(s)
-	return v.Source()
+	return c.Get(s)
 }
