@@ -1,5 +1,4 @@
 // Package config provides tools for reading configuration variables
-// config uses go.uber.org/config as support main tool
 package config
 
 import (
@@ -11,39 +10,14 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type varYam1 struct {
-	Foo string `yaml:"foo"`
-	Foos []int `yaml:"foos"`
-	Baz string `yaml:"baz"`
-	Bazes int `yaml:"bazes"`
-}
-
-type varYam2 struct {
-	Foo string `yaml:"foo"`
-	Foos []int `yaml:"foos"`
-}
-
-type baseYaml struct {
-	Key1 varYam1 `yaml:"key1"`
-	Key2 varYam2 `yaml:"key2"`
-}
-
 const (
-	fileP = "./testy.yaml"
+	fileP = "./testy.yml"
 )
 
 var (
-	yamv = baseYaml{
-		Key1: varYam1{
-			Foo: "bar", 
-			Foos: []int{1, 2},
-			Baz: "fal",
-			Bazes: 2,
-		},
-		Key2: varYam2{
-			Foo: "bar", 
-			Foos: []int{1, 2},
-		},
+	yamv = config{
+		Server: serverConfig{Port: 8000},
+		Db:     dbConfig{Name: "127.0.0.1:3000", User: "test", Pass: "test"},
 	}
 	y = []byte{}
 )
@@ -57,7 +31,6 @@ func testMainWrapper(m *testing.M) int {
 	}
 	defer os.Remove(fileP)
 	return m.Run()
-
 }
 
 func TestMain(m *testing.M) {
@@ -65,24 +38,25 @@ func TestMain(m *testing.M) {
 }
 
 func TestConst(t *testing.T) {
-	assert.EqualValues(t, cFile, "./config.yaml")
+	assert.EqualValues(t, cFile, "./config.yml")
 }
 
-func TestInitNil(t *testing.T) {
-	assert.Nil(t, c.c)
+func TestInit(t *testing.T) {
+	c = GetConfig()
+	assert.False(t, c.IsSet())
 }
 
-func TestSetFileNil(t *testing.T) {
-	c := GetConfig()
-	err := c.SetFile("./xxx.yaml")
-	assert.NotNil(t, err)
-	assert.EqualError(t, err, "open ./xxx.yaml: no such file or directory")
+func TestSetError(t *testing.T) {
+	c = GetConfig()
+	err := c.Set("error.yml")
+	assert.Error(t, err)
+	assert.EqualValues(t, "open error.yml: no such file or directory", err.Error())
+	assert.False(t, c.IsSet())
 }
 
-func TestGet1(t *testing.T) {
-	c := GetConfig()
-	err := c.SetFile(fileP)
+func TestIsSet(t *testing.T) {
+	c = GetConfig()
+	err := c.Set(fileP)
 	assert.Nil(t, err)
-	// ret := c.Get("key1.foo")
-	// assert.EqualValues(t, yamv.Key1.Foo, ret)
+	assert.True(t, c.IsSet())
 }
