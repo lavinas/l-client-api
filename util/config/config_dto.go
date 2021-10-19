@@ -10,6 +10,7 @@ var (
 		Server: serverConfig{Port: 0},
 		Db:     dbConfig{Name: "", User: "", Pass: ""},
 	}
+	isSet = false
 )
 
 type ConfigInterface interface {
@@ -35,7 +36,7 @@ type dbConfig struct {
 }
 
 func (c *config) IsSet() bool {
-	return !(c.Server.Port == 0 && c.Db.Name == "")
+	return isSet
 }
 
 func (c *config) GetServer() serverConfig {

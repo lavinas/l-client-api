@@ -13,5 +13,6 @@ func (c *config) Set(file string) error {
 	if err := viper.Unmarshal(c); err != nil {
 		return err
 	}
+	isSet = true
 	return nil
 }

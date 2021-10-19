@@ -42,21 +42,55 @@ func TestConst(t *testing.T) {
 }
 
 func TestInit(t *testing.T) {
-	c = GetConfig()
+	c := GetConfig()
 	assert.False(t, c.IsSet())
 }
 
 func TestSetError(t *testing.T) {
-	c = GetConfig()
+	c := GetConfig()
 	err := c.Set("error.yml")
 	assert.Error(t, err)
 	assert.EqualValues(t, "open error.yml: no such file or directory", err.Error())
 	assert.False(t, c.IsSet())
 }
 
-func TestIsSet(t *testing.T) {
-	c = GetConfig()
+func TestSetOk(t *testing.T) {
+	c := GetConfig()
 	err := c.Set(fileP)
 	assert.Nil(t, err)
 	assert.True(t, c.IsSet())
+	assert.EqualValues(t, c.GetDB(), yamv.Db)
+	assert.EqualValues(t, c.GetServer(), yamv.Server)
+}
+
+func TestSetPart1(t *testing.T) {
+	type configP struct {
+		Server serverConfig `yaml:"server"`
+	}
+	var yamvp = configP{Server: serverConfig{Port: 100}}
+	y, _ = yaml.Marshal(&yamvp)
+	ioutil.WriteFile(fileP, y, 0644)
+	defer os.Remove(fileP)
+	c := GetConfig()
+	err := c.Set(fileP)
+	assert.Nil(t, err)
+	err = c.Set(fileP)
+	assert.Nil(t, err)
+	assert.EqualValues(t, c.GetServer(), yamvp.Server)
+}
+
+func TestSetPart2(t *testing.T) {
+	type configP struct {
+		Db dbConfig `yaml:"db"`
+	}
+	var yamvp = configP{Db: dbConfig{Name: "127.0.0.1:3000", User: "test", Pass: "test"}}
+	y, _ = yaml.Marshal(&yamvp)
+	ioutil.WriteFile(fileP, y, 0644)
+	defer os.Remove(fileP)
+	c := GetConfig()
+	err := c.Set(fileP)
+	assert.Nil(t, err)
+	err = c.Set(fileP)
+	assert.Nil(t, err)
+	assert.EqualValues(t, c.GetDB(), yamvp.Db)
 }
