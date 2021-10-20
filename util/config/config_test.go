@@ -11,10 +11,12 @@ import (
 )
 
 const (
+	// fileP store a default test file path and name created for unit testes
 	fileP = "./testy.yml"
 )
 
 var (
+	// yamv store a variable structure 
 	yamv = config{
 		Server: serverConfig{Port: 8000},
 		Db:     dbConfig{Name: "127.0.0.1:3000", User: "test", Pass: "test"},
