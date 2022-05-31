@@ -1,2 +1,2 @@
-# l-user-api
-Api for manage and storage users
+# l-cient-api
+Api for manage and storage clients
